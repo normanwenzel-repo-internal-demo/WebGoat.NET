@@ -214,15 +214,8 @@
                  {
                      connection.Open();
  
--                    SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
--                    da.Fill(ds);
-+                    using (SqliteCommand command = new SqliteCommand(sql, connection))
-+                    {
-+                        // Add parameters to the command here, e.g.,
-+                        // command.Parameters.AddWithValue("@paramName", paramValue);
-+                        SqliteDataAdapter da = new SqliteDataAdapter(command);
-+                        da.Fill(ds);
-+                    }
+                     SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
+                     da.Fill(ds);
                  }
  
              }
@@ -356,8 +349,10 @@
                      connection.Open();
  
                      //get data
-                     string sql = "select * from CustomerLogin where email = '" + email + "';";
+-                    string sql = "select * from CustomerLogin where email = '" + email + "';";
++                    string sql = "select * from CustomerLogin where email = @Email;";
                      SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
++                    da.SelectCommand.Parameters.AddWithValue("@Email", email);
                      DataSet ds = new DataSet();
                      da.Fill(ds);
  
