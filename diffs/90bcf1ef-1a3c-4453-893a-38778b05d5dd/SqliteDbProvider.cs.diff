@@ -214,8 +214,15 @@
                  {
                      connection.Open();
  
-                     SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
-                     da.Fill(ds);
+-                    SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
+-                    da.Fill(ds);
++                    using (SqliteCommand command = new SqliteCommand(sql, connection))
++                    {
++                        // Add parameters to the command here, e.g.,
++                        // command.Parameters.AddWithValue("@paramName", paramValue);
++                        SqliteDataAdapter da = new SqliteDataAdapter(command);
++                        da.Fill(ds);
++                    }
                  }
  
              }
@@ -530,11 +537,7 @@
              {
                  connection.Open();
  
--                SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
-+                SqliteCommand command = new SqliteCommand(sql, connection);
-+                // Add parameters to the command here, e.g.,
-+                // command.Parameters.AddWithValue("@paramName", paramValue);
-+                SqliteDataAdapter da = new SqliteDataAdapter(command);
+                 SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
                  DataSet ds = new DataSet();
                  da.Fill(ds);
  
