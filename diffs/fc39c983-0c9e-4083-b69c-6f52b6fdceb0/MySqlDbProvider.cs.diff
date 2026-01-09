@@ -123,9 +123,16 @@
                  MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
              
                  //TODO: User reader instead (for all calls)
-                 DataSet ds = new DataSet();
-             
-                 da.Fill(ds);
+-                DataSet ds = new DataSet();
+-            
+-                da.Fill(ds);
++                string sql = "SELECT * FROM YourTable WHERE YourColumn = @parameter";
++                using (MySqlConnection connection = new MySqlConnection(_connectionString))
++                {
++                    MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
++                    da.SelectCommand.Parameters.AddWithValue("@parameter", yourParameterValue);
++                    DataSet ds = new DataSet();
++                    da.Fill(ds);
                  
                  try
                  {
@@ -520,7 +527,6 @@
              using (MySqlConnection connection = new MySqlConnection(_connectionString))
              {
                  MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
-+                da.SelectCommand.Parameters.AddWithValue("@parameterName", parameterValue);
                  DataSet ds = new DataSet();
                  da.Fill(ds);
  
